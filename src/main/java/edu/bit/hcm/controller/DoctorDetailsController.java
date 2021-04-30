@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +16,6 @@ import edu.bit.hcm.DoctorDTO;
 import edu.bit.hcm.SpecializationDTO;
 import edu.bit.hcm.entity.DoctorEntity;
 import edu.bit.hcm.model.DoctorDetailsModel;
-import edu.bit.hcm.wrapper.DTOListWrapper;
 import edu.bit.hcm.wrapper.DoctorDTOListWrapper;
 
 @RestController
