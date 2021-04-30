@@ -21,7 +21,7 @@ public class PatientController {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	@PostMapping("/savepatient")
+	@PostMapping("/patient/save")
 	public ResponseEntity<Object> savePatient(@RequestBody PatientDTO patientDTO) {
 		try {
 			PatientEntity patientEntity = convertToEntity(patientDTO);

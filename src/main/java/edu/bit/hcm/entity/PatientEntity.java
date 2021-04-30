@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="\"hms_master_patients\"", schema = "hcm_schema")
+@Table(name="\"hms_master_patient\"", schema = "hcm_schema")
 @NamedQuery(name="PatientEntity.findAll", query="SELECT p FROM PatientEntity p")
 public class PatientEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -65,6 +65,7 @@ public class PatientEntity implements Serializable {
 
 	@Column(name="\"weight\"")
 	private String weight;
+	
 
 	public PatientEntity() {
 	}
