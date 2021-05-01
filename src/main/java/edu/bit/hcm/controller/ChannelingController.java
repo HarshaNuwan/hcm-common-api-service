@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.bit.hcm.ChannelingDTO;
+import edu.bit.hcm.PatientDTO;
 import edu.bit.hcm.entity.ChannelingEntitity;
+import edu.bit.hcm.entity.PatientEntity;
 import edu.bit.hcm.model.ChannelingModel;
 import edu.bit.hcm.wrapper.ChannelingDTOWrapper;
 
@@ -41,19 +43,48 @@ public class ChannelingController {
 		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings();
 		List<ChannelingDTO> channelingDTOs = new ArrayList<ChannelingDTO>();
 		for (ChannelingEntitity entitity : channelingEntities) {
-			channelingDTOs.add(convertToDTO(entitity));
+			PatientEntity patientEntity = channelingModel.getPatienEntityById(entitity.getPid());
+			ChannelingDTO channelingDTO = convertToDTO(entitity);
+			if (null != patientEntity) {
+				channelingDTO.setPatientDTO(convertToPatientDTO(patientEntity));
+			}
+			channelingDTOs.add(channelingDTO);
+		}
+		ChannelingDTOWrapper channelingDTOWrapper = new ChannelingDTOWrapper();
+		channelingDTOWrapper.setList(channelingDTOs);
+		return ResponseEntity.status(HttpStatus.OK).body(channelingDTOWrapper);
+	}
+
+	@GetMapping("/channeling/findbydoctoranddate")
+	public ResponseEntity<ChannelingDTOWrapper> findByDoctorAndDate(@RequestParam String date,
+			@RequestParam int doctorId) throws ParseException {
+		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings(date, doctorId);
+		List<ChannelingDTO> channelingDTOs = new ArrayList<ChannelingDTO>();
+		for (ChannelingEntitity entitity : channelingEntities) {
+			PatientEntity patientEntity = channelingModel.getPatienEntityById(entitity.getPid());
+			ChannelingDTO channelingDTO = convertToDTO(entitity);
+			if (null != patientEntity) {
+				channelingDTO.setPatientDTO(convertToPatientDTO(patientEntity));
+			}
+			channelingDTOs.add(channelingDTO);
 		}
 		ChannelingDTOWrapper channelingDTOWrapper = new ChannelingDTOWrapper();
 		channelingDTOWrapper.setList(channelingDTOs);
 		return ResponseEntity.status(HttpStatus.OK).body(channelingDTOWrapper);
 	}
 	
-	@GetMapping("/channeling/findbydoctoranddate")
-	public ResponseEntity<ChannelingDTOWrapper> findByDoctorAndDate(@RequestParam String date, @RequestParam int doctorId) throws ParseException {
-		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings(date, doctorId);
+	@GetMapping("/channeling/findbypidanddate")
+	public ResponseEntity<ChannelingDTOWrapper> findByPIDAndDate(@RequestParam Integer pid,
+			@RequestParam int doctorId) throws ParseException {
+		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings(pid, doctorId);
 		List<ChannelingDTO> channelingDTOs = new ArrayList<ChannelingDTO>();
 		for (ChannelingEntitity entitity : channelingEntities) {
-			channelingDTOs.add(convertToDTO(entitity));
+			PatientEntity patientEntity = channelingModel.getPatienEntityById(entitity.getPid());
+			ChannelingDTO channelingDTO = convertToDTO(entitity);
+			if (null != patientEntity) {
+				channelingDTO.setPatientDTO(convertToPatientDTO(patientEntity));
+			}
+			channelingDTOs.add(channelingDTO);
 		}
 		ChannelingDTOWrapper channelingDTOWrapper = new ChannelingDTOWrapper();
 		channelingDTOWrapper.setList(channelingDTOs);
@@ -67,6 +98,12 @@ public class ChannelingController {
 
 	private ChannelingDTO convertToDTO(ChannelingEntitity entity) {
 		ChannelingDTO dto = modelMapper.map(entity, ChannelingDTO.class);
+
+		return dto;
+	}
+
+	private PatientDTO convertToPatientDTO(PatientEntity entity) {
+		PatientDTO dto = modelMapper.map(entity, PatientDTO.class);
 
 		return dto;
 	}
