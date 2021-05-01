@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.bit.hcm.DoctorDTO;
@@ -48,6 +49,20 @@ public class DoctorDetailsController {
 		DoctorDTOListWrapper dtoListWrapper = new DoctorDTOListWrapper();
 		List<DoctorDTO> list = new ArrayList<DoctorDTO>();
 		for (DoctorEntity entity : detailsModel.findAllDoctors()) {
+			DoctorDTO doctorDTO = convertToDTO(entity);
+			
+			doctorDTO.setSpecializationDTO(new SpecializationDTO(0, "Test"));
+			list.add(doctorDTO);
+		}
+		dtoListWrapper.setDoctors(list);
+		return ResponseEntity.status(HttpStatus.OK).body(dtoListWrapper);
+	}
+	
+	@GetMapping("/doctor/findbyspecializationcode")
+	public ResponseEntity<DoctorDTOListWrapper> findBySpecializationCode(@RequestParam Integer spc){
+		DoctorDTOListWrapper dtoListWrapper = new DoctorDTOListWrapper();
+		List<DoctorDTO> list = new ArrayList<DoctorDTO>();
+		for (DoctorEntity entity : detailsModel.findBySpecializationCode(spc)) {
 			DoctorDTO doctorDTO = convertToDTO(entity);
 			
 			doctorDTO.setSpecializationDTO(new SpecializationDTO(0, "Test"));

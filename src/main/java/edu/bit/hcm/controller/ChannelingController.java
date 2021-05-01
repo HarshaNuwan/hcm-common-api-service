@@ -50,8 +50,7 @@ public class ChannelingController {
 	
 	@GetMapping("/channeling/findbydoctoranddate")
 	public ResponseEntity<ChannelingDTOWrapper> findByDoctorAndDate(@RequestParam String date, @RequestParam int doctorId) throws ParseException {
-		Date dd = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings(dd, doctorId);
+		List<ChannelingEntitity> channelingEntities = channelingModel.getAllChannelings(date, doctorId);
 		List<ChannelingDTO> channelingDTOs = new ArrayList<ChannelingDTO>();
 		for (ChannelingEntitity entitity : channelingEntities) {
 			channelingDTOs.add(convertToDTO(entitity));

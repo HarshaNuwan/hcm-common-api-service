@@ -22,8 +22,14 @@ public class DoctorDetailsModel {
 		return doctorDetailsRepository.findAll();
 		
 	}
+	
+	public List<DoctorEntity> findBySpecializationCode(int spc){
+		return doctorDetailsRepository.findBySpecializationCode(new Integer(spc));
+	}
 
 	public void deleteDoctor(DoctorEntity entity) {
 		doctorDetailsRepository.delete(entity);		
 	}
+	
+	
 }
