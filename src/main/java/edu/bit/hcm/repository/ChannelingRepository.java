@@ -14,5 +14,8 @@ public interface ChannelingRepository extends JpaRepository<ChannelingEntitity, 
 	
 	@Query("SELECT c FROM ChannelingEntitity c WHERE c.date = ?1 AND c.doctorId = ?2")
 	public List<ChannelingEntitity> findByDoctorIDAndDate(Date date, Integer doctorId);
+	
+	@Query("SELECT c FROM ChannelingEntitity c WHERE c.pid = ?1 AND c.doctorId = ?2")
+	public List<ChannelingEntitity> findByPIDAndDate(Integer pid, Integer doctorId);
 
 }
