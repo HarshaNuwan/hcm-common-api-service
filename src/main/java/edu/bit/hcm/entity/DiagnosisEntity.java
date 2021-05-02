@@ -41,6 +41,12 @@ public class DiagnosisEntity implements Serializable {
 
 	@Column(name="\"reports\"")
 	private String reports;
+	
+	@Column(name="\"prescription_status\"")
+	private boolean prescriptionStatus;
+	
+	@Column(name="\"report_status\"")
+	private boolean reportStatus;
 
 	public DiagnosisEntity() {
 	}
@@ -108,5 +114,27 @@ public class DiagnosisEntity implements Serializable {
 	public void setReports(String reports) {
 		this.reports = reports;
 	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	public void setPrescriptionStatus(boolean prescriptionStatus) {
+		this.prescriptionStatus = prescriptionStatus;
+	}
+
+	public boolean isReportStatus() {
+		return reportStatus;
+	}
+
+	public void setReportStatus(boolean reportStatus) {
+		this.reportStatus = reportStatus;
+	}
+
+	public boolean isPrescriptionStatus() {
+		return prescriptionStatus;
+	}
+	
+	
 
 }

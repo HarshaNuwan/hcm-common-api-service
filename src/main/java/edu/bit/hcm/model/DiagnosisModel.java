@@ -22,5 +22,9 @@ public class DiagnosisModel {
 	public List<DiagnosisEntity> findByPidAndDoctorId(int pid, int doctorId) {
 		return diagnosisRepository.findByPidAndDoctorID(pid, doctorId);
 	}
+	
+	public void updatePrescriptionStatus(int dId, boolean status) {
+		diagnosisRepository.updatePrescriptionStatus(new Boolean(status), dId);
+	}
 
 }
