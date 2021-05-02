@@ -41,6 +41,21 @@ public class DiagnosisController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"Error\":\"Error occurred\"}");
 		}
 	}
+	
+	@GetMapping("/diagnosis/updatediagnosis")
+	public ResponseEntity<Object> updatePrescriptionStatus(@RequestParam Integer dId, @RequestParam Boolean status){
+		try {
+
+			diagnosisModel.updatePrescriptionStatus(dId, status);
+
+			return ResponseEntity.status(HttpStatus.OK).body("{\"Messege\":\"Diagnosis successfully updated\"}");
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"Error\":\"Error occurred\"}");
+		}
+	}
 
 	@GetMapping("/diagnosis/getallbypidanddoctorid")
 	public ResponseEntity<DiagnosisDTOListWrapper> findByPidAndDoctorId(@RequestParam Integer pid,
