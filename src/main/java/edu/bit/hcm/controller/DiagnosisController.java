@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.bit.hcm.DiagnosisDTO;
+import edu.bit.hcm.PatientDTO;
 import edu.bit.hcm.entity.DiagnosisEntity;
+import edu.bit.hcm.entity.PatientEntity;
 import edu.bit.hcm.model.DiagnosisModel;
 import edu.bit.hcm.wrapper.DiagnosisDTOListWrapper;
 
@@ -41,9 +43,9 @@ public class DiagnosisController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"Error\":\"Error occurred\"}");
 		}
 	}
-	
+
 	@GetMapping("/diagnosis/updatediagnosis")
-	public ResponseEntity<Object> updatePrescriptionStatus(@RequestParam Integer dId, @RequestParam Boolean status){
+	public ResponseEntity<Object> updatePrescriptionStatus(@RequestParam Integer dId, @RequestParam Boolean status) {
 		try {
 
 			diagnosisModel.updatePrescriptionStatus(dId, status);
@@ -55,6 +57,21 @@ public class DiagnosisController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"Error\":\"Error occurred\"}");
 		}
+	}
+
+	@GetMapping("/diagnosis/getbyDate")
+	public ResponseEntity<DiagnosisDTOListWrapper> findByDate(@RequestParam String date) {
+		List<DiagnosisEntity> diagnosisEntities = diagnosisModel.findByDate(date);
+		List<DiagnosisDTO> diagnosisDTOs = new ArrayList<DiagnosisDTO>();
+		for (DiagnosisEntity diagnosisEntity : diagnosisEntities) {
+			PatientEntity patientEntity = diagnosisModel.getPatienEntityById(diagnosisEntity.getPid());
+			DiagnosisDTO diagnosisDTO = convertToDTO(diagnosisEntity);
+			diagnosisDTO.setPatientDTO(convertToPatientDTO(patientEntity));
+			diagnosisDTOs.add(diagnosisDTO);
+		}
+		DiagnosisDTOListWrapper diagnosisDTOListWrapper = new DiagnosisDTOListWrapper();
+		diagnosisDTOListWrapper.setList(diagnosisDTOs);
+		return ResponseEntity.status(HttpStatus.OK).body(diagnosisDTOListWrapper);
 	}
 
 	@GetMapping("/diagnosis/getallbypidanddoctorid")
@@ -70,6 +87,17 @@ public class DiagnosisController {
 		diagnosisDTOListWrapper.setList(diagnosisDTOs);
 		return ResponseEntity.status(HttpStatus.OK).body(diagnosisDTOListWrapper);
 	}
+	
+	@GetMapping("/diagnosis/completelabreport")
+	public ResponseEntity<?> completeLabTest(@RequestParam int diagnosisId) {
+		try {
+			diagnosisModel.completeLabReport(diagnosisId);
+			return ResponseEntity.status(HttpStatus.OK).body("{\"Message\":\"Lab testing record updated\"}");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"Error\":\"Error occurred\"}");
+		}
+		
+	}
 
 	private DiagnosisEntity convertToEntity(DiagnosisDTO dto) {
 		DiagnosisEntity entity = modelMapper.map(dto, DiagnosisEntity.class);
@@ -78,6 +106,12 @@ public class DiagnosisController {
 
 	private DiagnosisDTO convertToDTO(DiagnosisEntity entity) {
 		DiagnosisDTO dto = modelMapper.map(entity, DiagnosisDTO.class);
+
+		return dto;
+	}
+	
+	private PatientDTO convertToPatientDTO(PatientEntity entity) {
+		PatientDTO dto = modelMapper.map(entity, PatientDTO.class);
 
 		return dto;
 	}
