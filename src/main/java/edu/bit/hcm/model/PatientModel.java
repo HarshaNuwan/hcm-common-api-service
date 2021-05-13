@@ -21,5 +21,9 @@ public class PatientModel {
 	public List<PatientEntity> getAllPatients(){
 		return patientRepository.findAll();
 	}
+	
+	public void deletePatient (PatientEntity entity) {
+		patientRepository.delete(entity);
+	}
 
 }

@@ -7,12 +7,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.bit.hcm.ChannelingDTO;
+import edu.bit.hcm.DoctorDTO;
 import edu.bit.hcm.PatientDTO;
 import edu.bit.hcm.entity.ChannelingEntitity;
 import edu.bit.hcm.entity.PatientEntity;
@@ -55,6 +57,12 @@ public class PatientController {
 		PatientDTOListWrapper patientDTOListWrapper = new PatientDTOListWrapper();
 		patientDTOListWrapper.setList(patientDTOs);
 		return ResponseEntity.status(HttpStatus.OK).body(patientDTOListWrapper);
+	}
+
+	@PostMapping("/patient/delete")
+	public ResponseEntity<String> deletePatient(@RequestBody PatientDTO patientDTO) {
+		patientModel.deletePatient(convertToEntity(patientDTO));
+		return ResponseEntity.status(HttpStatus.OK).body("{\"MESSAGE\":\"Patient details successfully deleted\"}");
 	}
 
 	private PatientEntity convertToEntity(PatientDTO dto) {

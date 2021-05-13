@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.bit.hcm.entity.ChannelingEntitity;
 import edu.bit.hcm.entity.DiagnosisEntity;
 import edu.bit.hcm.entity.PatientEntity;
 import edu.bit.hcm.repository.DiagnosisRepository;
@@ -53,4 +54,22 @@ public class DiagnosisModel {
 		diagnosisRepository.updateLabReportStatus(true, diagnosisId);
 	}
 
+	
+	public List<DiagnosisEntity> getAllPrescriptions(String fDate) {
+		List<DiagnosisEntity> pharmacyEntities = null;
+		try {
+			Date dd = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(fDate).getTime());
+			pharmacyEntities = diagnosisRepository.findByDateForPharmacy(dd);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return pharmacyEntities;
+	}
+	
+	public List<DiagnosisEntity> findByDate(Date date) {
+		return diagnosisRepository.findByDateForPharmacy(date);
+	}
+	
 }

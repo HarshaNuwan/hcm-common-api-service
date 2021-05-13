@@ -1,5 +1,6 @@
 package edu.bit.hcm.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +113,29 @@ public class DiagnosisController {
 	
 	private PatientDTO convertToPatientDTO(PatientEntity entity) {
 		PatientDTO dto = modelMapper.map(entity, PatientDTO.class);
+		return dto;
+	}
+	
+	@GetMapping("/diagnosis/getallbydateforpharmacy")
+	public ResponseEntity<DiagnosisDTOListWrapper> findByDateForPharmacy(@RequestParam String fDate) {
+		List<DiagnosisEntity> diagnosisEntities = diagnosisModel.getAllPrescriptions(fDate);
+		List<DiagnosisDTO> diagnosisDTOs = new ArrayList<DiagnosisDTO>();
+		for (DiagnosisEntity diagnosisEntity : diagnosisEntities) {
+			DiagnosisDTO diagnosisDTO = convertToDTO(diagnosisEntity);
+			diagnosisDTOs.add(diagnosisDTO);
+		}
+		DiagnosisDTOListWrapper diagnosisDTOListWrapper = new DiagnosisDTOListWrapper();
+		diagnosisDTOListWrapper.setList(diagnosisDTOs);
+		return ResponseEntity.status(HttpStatus.OK).body(diagnosisDTOListWrapper);
+	}
+
+	private DiagnosisEntity convertToEntityPharmacy(DiagnosisDTO dto) {
+		DiagnosisEntity entity = modelMapper.map(dto, DiagnosisEntity.class);
+		return entity;
+	}
+
+	private DiagnosisDTO convertToDTOPharmacy(DiagnosisEntity entity) {
+		DiagnosisDTO dto = modelMapper.map(entity, DiagnosisDTO.class);
 
 		return dto;
 	}

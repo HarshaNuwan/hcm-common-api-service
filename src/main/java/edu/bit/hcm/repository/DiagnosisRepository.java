@@ -31,4 +31,7 @@ public interface DiagnosisRepository extends JpaRepository<DiagnosisEntity, Inte
 	@Query("UPDATE DiagnosisEntity d SET d.reportStatus=?1 WHERE d.diagnosisId = ?2")
 	public void updateLabReportStatus(Boolean status, Integer diagnosis_id);
 
+	@Query("SELECT d FROM DiagnosisEntity d WHERE d.date = ?1")
+	public List<DiagnosisEntity> findByDateForPharmacy(java.sql.Date date);
+
 }
